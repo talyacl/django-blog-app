@@ -1,0 +1,45 @@
+{% extends "base/base.html" %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+    <h2 class="text-center text-white">{{ post.title }}</h2>
+    <p class="text-white">{{ post.content }}</p>
+    <p class="text-muted">Posted by {{ post.author }} on {{ post.published_date }}</p>
+
+    <form method="POST" action="{% url 'base:like_post' post.pk %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-secondary mb-4 mt-2">
+            {% if user in post.likes.all %}
+                Unlike
+            {% else %}
+                Like
+            {% endif %}
+        </button>
+    </form>
+
+    <h3 class="mb-4 text-white">Comments</h3>
+    {% for comment in post.comments.all %}
+        <div class="card mb-4">
+            <div class="card-body">
+                <p class="card-text">{{ comment.content }}</p>
+                <p class="card-text"><small class="text-muted">Posted by {{ comment.author }} on {{ comment.created_date }}</small></p>
+            </div>
+        </div>
+    {% empty %}
+        <p class="text-white">No comments yet.</p>
+    {% endfor %}
+
+    {% if user.is_authenticated %}
+        <h4 class="mb-4 text-white">Add a Comment</h4>
+        <form method="POST" action="{% url 'base:add_comment_to_post' post.pk %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <textarea id="content" name="content" class="form-control" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block mb-4">Submit</button>
+        </form>
+    {% else %}
+        <p><a href="{% url 'login' %}">Login</a> to add a comment.</p>
+    {% endif %}
+{% endblock %}

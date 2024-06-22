@@ -1,0 +1,20 @@
+{% extends "base/base.html" %}
+
+{% block title %}Search Results{% endblock %}
+
+{% block content %}
+    <h2 class="text-white mb-4">Search Results for "{{ query }}"</h2>
+    {% if results %}
+        {% for post in results %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h2 class="card-title"><a href="{% url 'base:post_detail' post.pk %}">{{ post.title }}</a></h2>
+                    <p class="card-text">{{ post.content|slice:":200" }}...</p>
+                    <p class="card-text"><small class="text-muted">Posted by {{ post.author }} on {{ post.published_date }}</small></p>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="text-white">No posts found matching your query.</p>
+    {% endif %}
+{% endblock %}

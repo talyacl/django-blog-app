@@ -1,0 +1,24 @@
+{% extends "base/base.html" %}
+
+{% block title %}Create/Edit Post{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-8 offset-md-2 text-white">
+            <h2 class="mt-4 mb-4 text-center">{% if form.instance.pk %}Edit{% else %}Create{% endif %} Post</h2>
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+                <div class="form-group ml-4">
+                    {{ form.title.label_tag }} {{ form.title }}
+                    {{ form.title.errors }}
+                </div>
+                <div class="form-group">
+                    {{ form.content.label_tag }} {{ form.content }}
+                    {{ form.content.errors }}
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">{% if form.instance.pk %}Update{% else %}Create{% endif %}</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
